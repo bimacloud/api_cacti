@@ -7,13 +7,13 @@ const db = require('../config/database');
 const getGraphData = async (req, res) => {
     try {
         const { graphId } = req.params;
-        const { range = '1m', group = 'none' } = req.query;
+        const { range = '1m', group = 'none', start, end } = req.query;
 
         // Simple validation
         const validRanges = ['1d', '1w', '1m'];
         const validGroups = ['none', 'hour', 'day', 'week'];
 
-        if (!validRanges.includes(range)) {
+        if (!start && !validRanges.includes(range)) {
             return res.status(400).json({ error: 'Invalid range. Use 1d, 1w, or 1m' });
         }
 
@@ -21,7 +21,7 @@ const getGraphData = async (req, res) => {
             return res.status(400).json({ error: 'Invalid group. Use none, hour, day, or week' });
         }
 
-        const result = await trafficService.getGraphTraffic(graphId, range, group);
+        const result = await trafficService.getGraphTraffic(graphId, range, group, start, end);
         res.json(result);
     } catch (error) {
         console.error('getGraphData error:', error);

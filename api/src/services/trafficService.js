@@ -84,8 +84,8 @@ class TrafficService {
         return data;
     }
 
-    async getGraphTraffic(graphId, range = '1m', group = 'none') {
-        const { start, end } = resolveTimeRange(range);
+    async getGraphTraffic(graphId, range = '1m', group = 'none', customStart = null, customEnd = null) {
+        const { start, end } = resolveTimeRange(range, customStart, customEnd);
 
         // Get RRD path from database
         const [rows] = await db.query(`

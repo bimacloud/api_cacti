@@ -107,8 +107,13 @@ Semua request wajib menyertakan header `Authorization: Bearer <API_TOKEN>`.
 *   **`GET /api/device/:id/graphs`**: Mengambil daftar graph yang dimiliki oleh suatu device (khusus filter template *Interface - Traffic (bits/sec)*).
 
 ### B. Endpoints Traffic & Usage
-*   **`GET /api/graph/:graphId`**: Endpoint utama untuk data grafik. Mendukung parameter `range` (1d, 1w, 1m) dan `group` (none, hour, day, week).
-*   **`GET /api/traffic/:graphId`**: Alias untuk `/api/graph/:graphId` demi menjaga kompatibilitas ke belakang (deprecated).
+*   **`GET /api/graph/:graphId`**: Endpoint utama untuk data grafik.
+    *   **Parameters**:
+        *   `range`: `1d`, `1w`, `1m` (Rentang waktu relatif dari sekarang).
+        *   `start`: `YYYY-MM-DD` atau `Timestamp` (Waktu mulai historical).
+        *   `end`: `YYYY-MM-DD` atau `Timestamp` (Waktu akhir historical).
+        *   `group`: `none`, `hour`, `day`, `week` (Agregasi backend).
+*   **`GET /api/traffic/:graphId`**: Alias untuk `/api/graph/:graphId` (deprecated).
 *   **`GET /api/top-usage`**: Mengambil data top bandwidth usage.
 
 ### C. Endpoint POP Status
@@ -155,10 +160,19 @@ curl -i -X GET "http://127.0.0.1:3001/api/graph/125?range=1d&group=hour" \
 -H "Authorization: Bearer T0k3n_R4hasia_N0c_ReP0rt1ng_2026"
 ```
 
+**4. Data Custom Rentang Waktu (Historical):**
+Contoh mengambil data dari November 2025 sampai Januari 2026:
+```bash
+curl -i -X GET "http://127.0.0.1:3001/api/graph/125?start=2025-11-01&end=2026-01-31&group=day" \
+-H "Authorization: Bearer T0k3n_R4hasia_N0c_ReP0rt1ng_2026"
+```
+
 ### Parameter Query
 | Parameter | Nilai yang Didukung | Keterangan |
 | :--- | :--- | :--- |
-| `range` | `1d`, `1w`, `1m` | Rentang waktu data (default: `1m`) |
+| `range` | `1d`, `1w`, `1m` | Rentang waktu relatif dari sekarang (default: `1m`) |
+| `start` | `YYYY-MM-DD` atau `Timestamp` | Waktu mulai (mengabaikan `range` jika diisi) |
+| `end` | `YYYY-MM-DD` atau `Timestamp` | Waktu akhir (default: `now`) |
 | `group` | `none`, `hour`, `day`, `week` | Agregasi data di backend (default: `none`) |
 
 **Contoh Response Data (Traffic JSON dengan Agregasi):**
