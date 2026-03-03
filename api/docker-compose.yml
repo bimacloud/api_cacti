@@ -5,8 +5,10 @@ services:
     build: .
     container_name: cacti-api
     restart: always
-    ports:
-      - "3001:3001"
+    # network_mode: host membuat container menggunakan network host langsung
+    # sehingga DB_HOST=127.0.0.1 bisa terhubung ke MySQL di server yang sama
+    # dan port 3001 langsung tersedia di host tanpa perlu mapping
+    network_mode: host
     environment:
       - NODE_ENV=production
     env_file:
