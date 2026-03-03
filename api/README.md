@@ -102,19 +102,19 @@ Pastikan IP terminal Anda yang sedang digunakan untuk mengeksekusi cURL ini masu
 
 ### Mendapatkan Daftar Semua Device:
 ```bash
-curl -i -X GET "http://127.0.0.1:3000/api/devices" \
+curl -i -X GET "http://127.0.0.1:3001/api/devices" \
 -H "Authorization: Bearer T0k3n_R4hasia_N0c_ReP0rt1ng_2026"
 ```
 
 ### Mendapatkan Info Device 20:
 ```bash
-curl -i -X GET "http://127.0.0.1:3000/api/device/20" \
+curl -i -X GET "http://127.0.0.1:3001/api/device/20" \
 -H "Authorization: Bearer T0k3n_R4hasia_N0c_ReP0rt1ng_2026"
 ```
 
 ### Memeriksa Status POP Devices:
 ```bash
-curl -i -X GET "http://127.0.0.1:3000/api/pop-status" \
+curl -i -X GET "http://127.0.0.1:3001/api/pop-status" \
 -H "Authorization: Bearer T0k3n_R4hasia_N0c_ReP0rt1ng_2026"
 ```
 
@@ -122,7 +122,7 @@ curl -i -X GET "http://127.0.0.1:3000/api/pop-status" \
 Untuk grafik traffic, API mendukung filter tanggal (berdasarkan Unix Timestamp atau string seperti RRDTool, contoh: `-1h`, `now`, atau format tanggal standard `2026-02-01`).
 
 ```bash
-curl -i -X GET "http://127.0.0.1:3000/api/traffic/125?start=2026-02-01&end=2026-03-01" \
+curl -i -X GET "http://127.0.0.1:3001/api/traffic/125?start=2026-02-01&end=2026-03-01" \
 -H "Authorization: Bearer T0k3n_R4hasia_N0c_ReP0rt1ng_2026"
 ```
 
