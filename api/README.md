@@ -107,7 +107,8 @@ Semua request wajib menyertakan header `Authorization: Bearer <API_TOKEN>`.
 *   **`GET /api/device/:id/graphs`**: Mengambil daftar graph yang dimiliki oleh suatu device (khusus filter template *Interface - Traffic (bits/sec)*).
 
 ### B. Endpoints Traffic & Usage
-*   **`GET /api/traffic/:graph_id`**: Mengambil data traffic (in/out) beserta hasil kalkulasi summary dan informasi graph berdasarkan Graph ID. Mendukung filter tanggal `start` dan `end`.
+*   **`GET /api/graph/:graphId`**: Endpoint utama untuk data grafik. Mendukung parameter `range` (1d, 1w, 1m) dan `group` (none, hour, day, week).
+*   **`GET /api/traffic/:graphId`**: Alias untuk `/api/graph/:graphId` demi menjaga kompatibilitas ke belakang (deprecated).
 *   **`GET /api/top-usage`**: Mengambil data top bandwidth usage.
 
 ### C. Endpoint POP Status
@@ -134,18 +135,35 @@ curl -i -X GET "http://127.0.0.1:3001/api/pop-status" \
 -H "Authorization: Bearer T0k3n_R4hasia_N0c_ReP0rt1ng_2026"
 ```
 
-### Mendapatkan Data Traffic & Statistik (Local Graph ID 125):
-Untuk grafik traffic, API mendukung filter tanggal (berdasarkan Unix Timestamp atau string seperti RRDTool, contoh: `-1h`, `now`, atau format tanggal standard `2026-02-01`).
+### Mendapatkan Data Traffic & Statistik (Graph ID 125):
 
+**1. Data Mentah (Default 1 Bulan):**
 ```bash
-curl -i -X GET "http://127.0.0.1:3001/api/traffic/125?start=2026-02-01&end=2026-03-01" \
+curl -i -X GET "http://127.0.0.1:3001/api/graph/125" \
 -H "Authorization: Bearer T0k3n_R4hasia_N0c_ReP0rt1ng_2026"
 ```
 
-**Contoh Response Data (Traffic JSON):**
+**2. Data 1 Minggu dengan Grouping Per Hari:**
+```bash
+curl -i -X GET "http://127.0.0.1:3001/api/graph/125?range=1w&group=day" \
+-H "Authorization: Bearer T0k3n_R4hasia_N0c_ReP0rt1ng_2026"
+```
+
+**3. Data 1 Hari dengan Grouping Per Jam:**
+```bash
+curl -i -X GET "http://127.0.0.1:3001/api/graph/125?range=1d&group=hour" \
+-H "Authorization: Bearer T0k3n_R4hasia_N0c_ReP0rt1ng_2026"
+```
+
+### Parameter Query
+| Parameter | Nilai yang Didukung | Keterangan |
+| :--- | :--- | :--- |
+| `range` | `1d`, `1w`, `1m` | Rentang waktu data (default: `1m`) |
+| `group` | `none`, `hour`, `day`, `week` | Agregasi data di backend (default: `none`) |
+
+**Contoh Response Data (Traffic JSON dengan Agregasi):**
 ```json
 {
-  "cached": false,
   "graph_info": {
     "graph_id": 125,
     "title": "IDC CNT 2216 - Traffic - JKT-IX",
@@ -153,7 +171,7 @@ curl -i -X GET "http://127.0.0.1:3001/api/traffic/125?start=2026-02-01&end=2026-
   },
   "summary": {
     "total_in_raw": 5639343563537510,
-    "total_out_raw": 268830385620237.9,
+    "total_out_raw": 268830385620237,
     "total_in_formatted": "5.64 Pb",
     "total_out_formatted": "268.83 Tb",
     "current_in_formatted": "1.86 Gb/s",
@@ -165,11 +183,15 @@ curl -i -X GET "http://127.0.0.1:3001/api/traffic/125?start=2026-02-01&end=2026-
     "time_range_seconds": 2419200,
     "data_type": "bits"
   },
+  "range": "1w",
+  "group": "day",
   "data": [
     {
-      "timestamp": 1706745600000,
-      "traffic_in": 2865780562,
-      "traffic_out": 28076045
+      "label": "2026-03-01",
+      "avg_in": 1500000000,
+      "avg_out": 320000000,
+      "max_in": 2600000000,
+      "max_out": 540000000
     }
   ]
 }

@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '/opt/lampp/htdocs/cacti/api/.env' });
+require('dotenv').config();
 const db = require('./src/config/database');
 
 async function test() {
