@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  cacti-api:
+    build: .
+    container_name: cacti-api
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env
+    volumes:
+      # Mount direktori RRD Server Cacti Production ke dalam Docker
+      - /var/www/html/cacti/rra:/var/www/html/cacti/rra
