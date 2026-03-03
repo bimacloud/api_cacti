@@ -34,6 +34,6 @@ app.use('/api', router);
 
 app.use((req, res) => res.status(404).json({ error: 'Endpoint Not Found' }));
 
-app.listen(PORT, '127.0.0.1', () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server: Berjalan di port ${PORT}, Mode: ${process.env.NODE_ENV || 'development'}`);
 });
