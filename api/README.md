@@ -97,7 +97,23 @@ npm run dev
 > [!WARNING]
 > Saat men-deploy kembali API ini ke server production \`monitor.puskomedia.net.id\`, pastikan Anda **mematikan** \`USE_REMOTE_RRD=false\` pada \`.env\` agar API kembali menggunakan \`rrdtool\` lokal dan tidak menambah *overhead* koneksi SSH.
 
-## 4. Cara Testing via cURL
+## 4. Daftar Endpoint API
+
+Semua request wajib menyertakan header `Authorization: Bearer <API_TOKEN>`.
+
+### A. Endpoints Device
+*   **`GET /api/devices`**: Mengambil daftar semua device yang ada di Cacti.
+*   **`GET /api/device/:id`**: Mengambil detail informasi spesifik device berdasarkan ID.
+*   **`GET /api/device/:id/graphs`**: Mengambil daftar graph yang dimiliki oleh suatu device (khusus filter template *Interface - Traffic (bits/sec)*).
+
+### B. Endpoints Traffic & Usage
+*   **`GET /api/traffic/:graph_id`**: Mengambil data traffic (in/out) beserta hasil kalkulasi summary dan informasi graph berdasarkan Graph ID. Mendukung filter tanggal `start` dan `end`.
+*   **`GET /api/top-usage`**: Mengambil data top bandwidth usage.
+
+### C. Endpoint POP Status
+*   **`GET /api/pop-status`**: Mengambil status device POP (up/down/recovering).
+
+## 5. Cara Testing via cURL
 Pastikan IP terminal Anda yang sedang digunakan untuk mengeksekusi cURL ini masuk ke dalam daftar `ALLOWED_IPS` yang ada di `.env` (atau hapus nilainya untuk Allow-All).
 
 ### Mendapatkan Daftar Semua Device:
