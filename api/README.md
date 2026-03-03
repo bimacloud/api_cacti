@@ -167,12 +167,18 @@ curl -i -X GET "http://127.0.0.1:3001/api/graph/125?start=2025-11-01&end=2026-01
 -H "Authorization: Bearer T0k3n_R4hasia_N0c_ReP0rt1ng_2026"
 ```
 
+**5. Data Spesifik Jam & Menit:**
+```bash
+curl -i -X GET "http://127.0.0.1:3001/api/graph/125?start=2026-03-03%2010:00&end=2026-03-03%2019:00&group=none" \
+-H "Authorization: Bearer T0k3n_R4hasia_N0c_ReP0rt1ng_2026"
+```
+
 ### Parameter Query
 | Parameter | Nilai yang Didukung | Keterangan |
 | :--- | :--- | :--- |
 | `range` | `1d`, `1w`, `1m` | Rentang waktu relatif dari sekarang (default: `1m`) |
-| `start` | `YYYY-MM-DD` atau `Timestamp` | Waktu mulai (mengabaikan `range` jika diisi) |
-| `end` | `YYYY-MM-DD` atau `Timestamp` | Waktu akhir (default: `now`) |
+| `start` | `YYYY-MM-DD HH:mm` atau `Timestamp` | Waktu mulai (mengabaikan `range` jika diisi) |
+| `end` | `YYYY-MM-DD HH:mm` atau `Timestamp` | Waktu akhir (default: `now`) |
 | `group` | `none`, `hour`, `day`, `week` | Agregasi data di backend (default: `none`) |
 
 **Contoh Response Data (Traffic JSON dengan Agregasi):**

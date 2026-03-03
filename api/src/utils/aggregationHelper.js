@@ -8,15 +8,15 @@ const getGroupLabel = (timestamp, group) => {
     const m = String(date.getMonth() + 1).padStart(2, '0');
     const d = String(date.getDate()).padStart(2, '0');
     const h = String(date.getHours()).padStart(2, '0');
+    const min = String(date.getMinutes()).padStart(2, '0');
 
     if (group === 'hour') {
-        return `${y}-${m}-${d} ${h}:00`;
+        return `${y}-${m}-${d} ${h}:00:00`;
     }
     if (group === 'day') {
-        return `${y}-${m}-${d}`;
+        return `${y}-${m}-${d} 00:00:00`;
     }
     if (group === 'week') {
-        // Simple ISO week calculation
         const target = new Date(date.valueOf());
         const dayNr = (date.getDay() + 6) % 7;
         target.setDate(target.getDate() - dayNr + 3);
@@ -28,12 +28,16 @@ const getGroupLabel = (timestamp, group) => {
         const week = 1 + Math.ceil((firstThursday - target) / 604800000);
         return `${y}-W${String(week).padStart(2, '0')}`;
     }
-    return null;
+    // Default for 'none' or raw data
+    return `${y}-${m}-${d} ${h}:${min}:00`;
 };
 
 const aggregateData = (rawData, group = 'none') => {
     if (group === 'none' || !group) {
-        return rawData;
+        return rawData.map(item => ({
+            ...item,
+            label: getGroupLabel(item.timestamp, 'none')
+        }));
     }
 
     const groups = {};
